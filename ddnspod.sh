@@ -15,14 +15,24 @@
 # Support Ipv6 truly (Yes, it was just claimed to, but actually not = =!)
 # Add another way resolving IPv6, for machines without nvram.
 
-#if you have any issues, please let me know.
+# if you have any issues, please let me know.
 # https://blog.csdn.net/Imkiimki/article/details/83794355
 # Daleshen mailto:gf@gfshen.cn
 
 #################################################
+# 在前作者的基础上自定义了一下一些基本功能
+# 2021-02-22
+# Support targer dir can be chosed
+# Can enable from reboot
+# By the way, return 0 and then end.
+# Author mailto:Suroy@qq.com
+#################################################
+
+
+#################################################
 
 #Please select IP type
-IPtype=1  #1.WAN 2.LAN 3.IPv6
+IPtype=3  #1.WAN 2.LAN 3.IPv6
 #---------------------
 if [ $IPtype = '3' ]; then
     record_type='AAAA'
@@ -30,6 +40,18 @@ else
     record_type='A'
 fi
 echo Type: ${record_type}
+
+
+#Please select Dir mode
+dirMode=2  #1.auto 2.target
+#---------------------
+if [ $dirMode = '2' ]; then
+    DIR=$(dirname -- "$(readlink "$0")")
+else
+    DIR='/home/pi/ddns'
+fi
+echo Dirmode: ${record_type}
+
 
 # OS Detection
 case $(uname) in
@@ -147,7 +169,7 @@ rreadlink() ( # Execute the function in a *subshell* to localize variables and t
   fi
 )
 
-DIR=$(dirname -- "$(readlink "$0")")
+# DIR=$(dirname -- "$(readlink "$0")")
 
 # Global Variables:
 
@@ -280,3 +302,5 @@ arDdnsCheck() {
 #done
 
 . $DIR/dns.conf
+
+exit 0
